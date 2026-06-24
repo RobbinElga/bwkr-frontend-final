@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: process.env.NODE_ENV === "development",
     remotePatterns: [
+      { protocol: "https", hostname: "kyai-apiii-bro-merdeka.bwkr.org", pathname: "/storage/**" },
       { protocol: "http", hostname: "localhost", port: "8000", pathname: "/storage/**" },
       { protocol: "https", hostname: "i.ytimg.com", pathname: "/**" },
       { protocol: "https", hostname: "img.youtube.com", pathname: "/**" },
