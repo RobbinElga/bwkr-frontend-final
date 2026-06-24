@@ -419,7 +419,17 @@ export function DonationForm({
                                 </div>
 
                                 <div>
-                                    <label className="mb-2 block text-label-md text-on-surface-variant">Input Nominal Lain (Opsional)</label>
+                                    <input
+                                        type="text"
+                                        inputMode="numeric"
+                                        value={amount ? amount.toLocaleString("id-ID") : ""}
+                                        onChange={(e) => {
+                                            const digits = e.target.value.replace(/\D/g, "");   // buang titik & non-angka
+                                            setAmount(digits ? Number(digits) : 0);
+                                        }}
+                                        placeholder="0"
+                                        className="w-full rounded-lg border border-outline-variant bg-surface-gray py-3 pl-12 pr-4 text-body-md text-on-surface outline-none focus:border-primary"
+                                    />
                                     <div className="relative">
                                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-label-md text-on-surface-variant">Rp</span>
                                         <input type="number" inputMode="numeric" value={amount || ""} onChange={(e) => setAmount(Number(e.target.value))} placeholder="0"
