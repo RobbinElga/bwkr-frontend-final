@@ -20,7 +20,7 @@ function FooterCol({ title, links }: { title: string; links: [string, string][] 
     );
 }
 
-export function Footer({ settings }: { settings: SiteSettings }) {
+export function Footer({ settings = {} }: { settings?: SiteSettings }) {
     const logo = settings.site_logo ?? null;
     const siteName = settings.site_name || "BWKR";
     const tagline =

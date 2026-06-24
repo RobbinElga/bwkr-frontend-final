@@ -19,7 +19,7 @@ const navLinks = [
     { label: "Tentang", href: "/tentang" },
 ];
 
-export function Header({ settings }: { settings: SiteSettings }) {
+export function Header({ settings = {} }: { settings?: SiteSettings }) {
     const logo = settings.site_logo ?? null;
     const siteName = settings.site_name || "BWKR";
 
