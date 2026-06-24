@@ -1,11 +1,7 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Container } from "@/components/layout/Container";
 import { Icon } from "@/components/ui/Icon";
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
+import type { SiteSettings } from "@/services/public";
 
 function FooterCol({ title, links }: { title: string; links: [string, string][] }) {
     return (
@@ -24,24 +20,12 @@ function FooterCol({ title, links }: { title: string; links: [string, string][] 
     );
 }
 
-export function Footer() {
-    const [logo, setLogo] = useState<string | null>(null);
-    const [siteName, setSiteName] = useState("BWKR");
-    const [tagline, setTagline] = useState(
-        "Platform wakaf digital modern yang menghubungkan kebaikan dengan kebutuhan umat secara transparan dan amanah."
-    );
-
-    useEffect(() => {
-        fetch(`${API}/settings`, { headers: { Accept: "application/json" } })
-            .then((r) => (r.ok ? r.json() : null))
-            .then((b) => {
-                if (!b?.data) return;
-                if (b.data.site_logo) setLogo(b.data.site_logo);
-                if (b.data.site_name) setSiteName(b.data.site_name);
-                if (b.data.footer_tagline) setTagline(b.data.footer_tagline);
-            })
-            .catch(() => { });
-    }, []);
+export function Footer({ settings }: { settings: SiteSettings }) {
+    const logo = settings.site_logo ?? null;
+    const siteName = settings.site_name || "BWKR";
+    const tagline =
+        settings.footer_tagline ||
+        "Platform wakaf digital modern yang menghubungkan kebaikan dengan kebutuhan umat secara transparan dan amanah.";
 
     return (
         <footer className="border-t border-border-subtle bg-surface-container-lowest">
@@ -49,7 +33,7 @@ export function Footer() {
                 <div className="flex flex-col gap-6">
                     {logo ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={logo} alt={siteName} className="h-12 w-auto object-contain self-start" />
+                        <img src={logo} alt={siteName} className="h-14 w-auto object-contain self-start" />
                     ) : (
                         <span className="text-headline-md font-bold text-primary">{siteName}</span>
                     )}

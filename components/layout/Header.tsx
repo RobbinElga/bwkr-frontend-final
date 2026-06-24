@@ -2,15 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui/Icon";
 import { UserMenu } from "@/components/layout/UserMenu";
 import { useAuth } from "@/stores/auth";
 import { ConfirmModal } from "../ui/ConfirmModal";
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
+import type { SiteSettings } from "@/services/public";
 
 const navLinks = [
     { label: "Beranda", href: "/" },
@@ -21,39 +19,22 @@ const navLinks = [
     { label: "Tentang", href: "/tentang" },
 ];
 
-function isActive(pathname: string, href: string) {
-    if (href === "/") return pathname === "/";
-    if (href.startsWith("/#")) return false; // anchor, jangan ditandai aktif
-    return pathname === href || pathname.startsWith(href + "/");
-}
+export function Header({ settings }: { settings: SiteSettings }) {
+    const logo = settings.site_logo ?? null;
+    const siteName = settings.site_name || "BWKR";
 
-export function Header({ settings = {} }: { settings?: Record<string, string | null> }) {
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
     const { user, status, logout } = useAuth();
     const [showLogout, setShowLogout] = useState(false);
     const [logoutLoading, setLogoutLoading] = useState(false);
     const router = useRouter();
-    const pathname = usePathname();
-    const [logo, setLogo] = useState<string | null>(null);
-    const [siteName, setSiteName] = useState("BWKR");
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 20);
         onScroll();
-        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("scroll", onScroll);
         return () => window.removeEventListener("scroll", onScroll);
-    }, []);
-
-    useEffect(() => {
-        fetch(`${API}/settings`, { headers: { Accept: "application/json" } })
-            .then((r) => (r.ok ? r.json() : null))
-            .then((b) => {
-                if (!b?.data) return;
-                if (b.data.site_logo) setLogo(b.data.site_logo);
-                if (b.data.site_name) setSiteName(b.data.site_name);
-            })
-            .catch(() => { });
     }, []);
 
     async function handleLogout() {
@@ -74,52 +55,33 @@ export function Header({ settings = {} }: { settings?: Record<string, string | n
                 scrolled ? "bg-surface/95 shadow-lg" : "bg-surface/90 shadow-md"
             )}
         >
-            {/* Mobile: flex (logo kiri, hamburger kanan) | Desktop: grid 3 kolom (nav center) */}
-            <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 md:grid md:grid-cols-[1fr_auto_1fr] md:px-8">
-                {/* Kiri: logo */}
-                <Link href="/" className="flex items-center gap-2 text-headline-lg font-bold text-primary">
-                    {logo ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={logo} alt={siteName} className="h-14 w-auto object-contain md:h-16" />
-                    ) : (
-                        siteName
-                    )}
-                </Link>
-
-                {/* Tengah: nav + indikator aktif (pill meluncur) — desktop only */}
-                <nav className="hidden items-center gap-1 md:flex md:justify-self-center">
-                    {navLinks.map((l) => {
-                        const active = isActive(pathname, l.href);
-                        return (
+            <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 md:px-8">
+                <div className="flex items-center gap-8">
+                    <Link href="/" className="flex items-center gap-2 text-headline-lg font-bold text-primary">
+                        {logo ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={logo} alt={siteName} className="h-14 w-auto object-contain md:h-16" />
+                        ) : (
+                            siteName
+                        )}
+                    </Link>
+                    <nav className="hidden items-center gap-6 md:flex">
+                        {navLinks.map((l) => (
                             <Link
                                 key={l.href}
                                 href={l.href}
-                                className={cn(
-                                    "relative rounded-full px-4 py-2 text-label-md transition-colors",
-                                    active ? "text-on-primary" : "text-on-surface-variant hover:text-primary"
-                                )}
+                                className="text-label-md text-on-surface-variant transition-colors hover:text-primary"
                             >
-                                {active && (
-                                    <motion.span
-                                        layoutId="navPill"
-                                        className="absolute inset-0 rounded-full bg-primary"
-                                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                                    />
-                                )}
-                                <span className="relative z-10">{l.label}</span>
+                                {l.label}
                             </Link>
-                        );
-                    })}
-                </nav>
+                        ))}
+                    </nav>
+                </div>
 
-                {/* Kanan: akun + hamburger */}
-                <div className="flex items-center gap-3 md:justify-self-end">
-                    {/* Desktop: menu akun */}
+                <div className="flex items-center gap-3">
                     <div className="hidden md:block">
                         <UserMenu />
                     </div>
-
-                    {/* Mobile: hamburger */}
                     <button
                         onClick={() => setOpen((v) => !v)}
                         className="rounded-full p-2 text-primary md:hidden"
@@ -133,26 +95,17 @@ export function Header({ settings = {} }: { settings?: Record<string, string | n
             {open && (
                 <div className="border-t border-border-subtle bg-surface px-4 py-4 md:hidden">
                     <nav className="flex flex-col gap-1">
-                        {navLinks.map((l) => {
-                            const active = isActive(pathname, l.href);
-                            return (
-                                <Link
-                                    key={l.href}
-                                    href={l.href}
-                                    onClick={() => setOpen(false)}
-                                    className={cn(
-                                        "rounded-lg px-3 py-3 text-label-md transition-colors",
-                                        active
-                                            ? "bg-primary text-on-primary"
-                                            : "text-on-surface-variant hover:bg-surface-container-low"
-                                    )}
-                                >
-                                    {l.label}
-                                </Link>
-                            );
-                        })}
+                        {navLinks.map((l) => (
+                            <Link
+                                key={l.href}
+                                href={l.href}
+                                onClick={() => setOpen(false)}
+                                className="rounded-lg px-3 py-3 text-label-md text-on-surface-variant hover:bg-surface-container-low"
+                            >
+                                {l.label}
+                            </Link>
+                        ))}
 
-                        {/* Area akun (mobile) */}
                         {status === "authenticated" && user ? (
                             <div className="mt-2 border-t border-border-subtle pt-3">
                                 <div className="px-3 pb-2">
