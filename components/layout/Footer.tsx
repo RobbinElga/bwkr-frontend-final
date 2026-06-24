@@ -33,7 +33,7 @@ export function Footer({ settings = {} }: { settings?: SiteSettings }) {
                 <div className="flex flex-col gap-6">
                     {logo ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={logo} alt={siteName} className="h-14 w-auto object-contain self-start" />
+                        <img src={logo} alt={siteName} className="h-16 w-auto object-contain self-start" />
                     ) : (
                         <span className="text-headline-md font-bold text-primary">{siteName}</span>
                     )}

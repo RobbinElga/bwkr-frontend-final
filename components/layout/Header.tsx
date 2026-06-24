@@ -55,12 +55,12 @@ export function Header({ settings = {} }: { settings?: SiteSettings }) {
                 scrolled ? "bg-surface/95 shadow-lg" : "bg-surface/90 shadow-md"
             )}
         >
-            <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 md:px-8">
+            <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 md:px-8">
                 <div className="flex items-center gap-8">
                     <Link href="/" className="flex items-center gap-2 text-headline-lg font-bold text-primary">
                         {logo ? (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img src={logo} alt={siteName} className="h-14 w-auto object-contain md:h-16" />
+                            <img src={logo} alt={siteName} className="h-16 w-auto object-contain md:h-20" />
                         ) : (
                             siteName
                         )}
