@@ -10,6 +10,8 @@ import { UserMenu } from "@/components/layout/UserMenu";
 import { useAuth } from "@/stores/auth";
 import { ConfirmModal } from "../ui/ConfirmModal";
 
+const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
+
 const navLinks = [
     { label: "Beranda", href: "/" },
     { label: "Program", href: "/program" },
@@ -33,12 +35,25 @@ export function Header({ settings = {} }: { settings?: Record<string, string | n
     const [logoutLoading, setLogoutLoading] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
+    const [logo, setLogo] = useState<string | null>(null);
+    const [siteName, setSiteName] = useState("BWKR");
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 20);
         onScroll();
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
+    useEffect(() => {
+        fetch(`${API}/settings`, { headers: { Accept: "application/json" } })
+            .then((r) => (r.ok ? r.json() : null))
+            .then((b) => {
+                if (!b?.data) return;
+                if (b.data.site_logo) setLogo(b.data.site_logo);
+                if (b.data.site_name) setSiteName(b.data.site_name);
+            })
+            .catch(() => { });
     }, []);
 
     async function handleLogout() {
@@ -62,12 +77,12 @@ export function Header({ settings = {} }: { settings?: Record<string, string | n
             {/* Mobile: flex (logo kiri, hamburger kanan) | Desktop: grid 3 kolom (nav center) */}
             <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 md:grid md:grid-cols-[1fr_auto_1fr] md:px-8">
                 {/* Kiri: logo */}
-                <Link href="/" className="justify-self-start">
-                    {settings.site_logo ? (
+                <Link href="/" className="flex items-center gap-2 text-headline-lg font-bold text-primary">
+                    {logo ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={settings.site_logo} alt={settings.site_name ?? "BWKR"} className="h-9 w-auto" />
+                        <img src={logo} alt={siteName} className="h-14 w-auto object-contain md:h-16" />
                     ) : (
-                        <span className="text-headline-lg font-bold text-primary">{settings.site_name ?? "BWKR"}</span>
+                        siteName
                     )}
                 </Link>
 
