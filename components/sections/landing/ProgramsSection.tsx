@@ -56,7 +56,7 @@ export function ProgramsSection({ programs }: { programs: Program[] }) {
                                     <h3 className="mb-2 text-headline-md text-on-surface">{p.name}</h3>
                                     <p className="mb-6 line-clamp-2 text-body-md text-on-surface-variant">{p.description}</p>
                                     <Link
-                                        href={`/donasi?program=${p.slug}`}
+                                        href={`/program/${p.slug}`}
                                         className="block w-full rounded-lg border-2 border-primary py-3 text-center text-label-md text-primary transition-all hover:bg-primary hover:text-white"
                                     >
                                         Pilih Program
