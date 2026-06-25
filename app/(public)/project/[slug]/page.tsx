@@ -58,7 +58,11 @@ export default async function ProjectDetailPage({ params }: Props) {
                             )}
                             <h1 className="mt-1 text-display-lg-mobile text-primary">{p.name}</h1>
                         </div>
-                        <ProjectTabs description={p.description} updates={p.updates ?? []} />
+                        <ProjectTabs
+                            description={p.description}
+                            updates={p.updates ?? []}
+                            projectSlug={p.slug}
+                        />
                     </div>
 
                     {/* Kanan: kartu donasi sticky */}

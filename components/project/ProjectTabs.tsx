@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatRupiah } from "@/lib/format";
 import type { ProjectUpdate } from "@/types";
+import { getProjectDonors, type ProjectDonor } from "@/services/public";
 
 const tabs = [
     { id: "tentang", label: "Tentang" },
@@ -17,11 +18,20 @@ type TabId = (typeof tabs)[number]["id"];
 export function ProjectTabs({
     description,
     updates,
+    projectSlug,
 }: {
     description: string | null;
     updates: ProjectUpdate[];
+    projectSlug: string;
 }) {
     const [active, setActive] = useState<TabId>("tentang");
+    const [donors, setDonors] = useState<ProjectDonor[] | null>(null);
+
+    useEffect(() => {
+        if (active === "donatur" && donors === null) {
+            getProjectDonors(projectSlug).then(setDonors).catch(() => setDonors([]));
+        }
+    }, [active, donors, projectSlug]);
 
     return (
         <div>
@@ -31,14 +41,19 @@ export function ProjectTabs({
                         key={t.id}
                         onClick={() => setActive(t.id)}
                         className={`relative -mb-px pb-4 text-label-md transition-colors ${active === t.id
-                                ? "border-b-2 border-primary text-primary"
-                                : "text-on-surface-variant hover:text-on-surface"
+                            ? "border-b-2 border-primary text-primary"
+                            : "text-on-surface-variant hover:text-on-surface"
                             }`}
                     >
                         {t.label}
                         {t.id === "update" && updates.length > 0 && (
                             <span className="ml-1 rounded-full bg-primary-container px-2 py-0.5 text-label-sm text-on-primary-container">
                                 {updates.length}
+                            </span>
+                        )}
+                        {t.id === "donatur" && donors && donors.length > 0 && (
+                            <span className="ml-1 rounded-full bg-primary-container px-2 py-0.5 text-label-sm text-on-primary-container">
+                                {donors.length}
                             </span>
                         )}
                     </button>
@@ -82,12 +97,35 @@ export function ProjectTabs({
                     ))}
 
                 {active === "donatur" && (
-                    <div className="rounded-xl border border-dashed border-border-subtle p-8 text-center">
-                        <Icon name="groups" className="text-4xl text-on-surface-variant opacity-50" />
-                        <p className="mt-3 text-body-md text-on-surface-variant">
-                            Daftar wakif akan tampil di sini setelah alur donasi aktif.
-                        </p>
-                    </div>
+                    donors === null ? (
+                        <div className="space-y-3">
+                            {[0, 1, 2].map((i) => <div key={i} className="h-14 rounded-xl bg-surface-container-high animate-pulse" />)}
+                        </div>
+                    ) : donors.length === 0 ? (
+                        <div className="rounded-xl border border-dashed border-border-subtle p-8 text-center">
+                            <Icon name="groups" className="text-4xl text-on-surface-variant opacity-50" />
+                            <p className="mt-3 text-body-md text-on-surface-variant">
+                                Belum ada wakif terverifikasi untuk project ini.
+                            </p>
+                        </div>
+                    ) : (
+                        <ul className="divide-y divide-border-subtle">
+                            {donors.map((d, i) => (
+                                <li key={i} className="flex items-center justify-between gap-3 py-3">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-fixed text-on-primary-fixed shrink-0">
+                                            <Icon name="volunteer_activism" className="text-[20px]" />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <p className="text-label-md text-on-surface truncate">{d.name}</p>
+                                            {d.date && <p className="text-label-sm text-on-surface-variant">{formatDate(d.date)}</p>}
+                                        </div>
+                                    </div>
+                                    <span className="text-label-md font-bold text-primary whitespace-nowrap">{formatRupiah(d.amount)}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    )
                 )}
             </div>
         </div>

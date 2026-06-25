@@ -30,3 +30,7 @@ export async function getReports(): Promise<ReportItem[]> {
 
 export type SiteSettings = Record<string, string | null>;
 export const getSiteSettings = () => safeFetch<SiteSettings>("/settings", {});
+
+export interface ProjectDonor { name: string; amount: number; date: string | null; }
+export const getProjectDonors = (slug: string) =>
+    safeFetch<ProjectDonor[]>(`/projects/${slug}/donors`, []);
