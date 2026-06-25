@@ -120,6 +120,26 @@ export function DonationForm({
         }
     }
 
+    async function downloadQris() {
+        const url = selectedBank?.qris_image_url;
+        if (!url) return;
+        try {
+            const res = await fetch(url);
+            const blob = await res.blob();
+            const obj = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = obj;
+            a.download = `QRIS-${selectedBank?.bank_name ?? "wakaf"}.png`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(obj);
+            showToast("QRIS diunduh");
+        } catch {
+            window.open(url, "_blank", "noopener,noreferrer"); // fallback
+        }
+    }
+
     const targetName = selectedProject?.name ?? selectedProgram?.name ?? "Wakaf Umum BWKR";
     const targetDesc = selectedProject?.description ?? selectedProgram?.description ?? "Setiap rupiah Anda menjadi amal jariyah yang terus mengalir.";
     const targetImage = selectedProject?.image_urls?.[0] ?? null;
@@ -231,7 +251,20 @@ export function DonationForm({
                                         <div className="flex flex-col items-center justify-center gap-3 text-center">
                                             <p className="text-label-sm uppercase tracking-wider text-on-surface-variant">Scan untuk Membayar</p>
                                             {selectedBank.qris_image_url ? (
-                                                <Image src={selectedBank.qris_image_url} alt="QRIS" width={240} height={240} className="rounded-xl border border-border-subtle bg-white p-2" />
+                                                <>
+                                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                    <img
+                                                        src={selectedBank.qris_image_url}
+                                                        alt="QRIS"
+                                                        className="h-60 w-60 rounded-xl border border-border-subtle bg-white object-contain p-2"
+                                                    />
+                                                    <button
+                                                        onClick={downloadQris}
+                                                        className="inline-flex items-center gap-2 rounded-lg border border-primary px-4 py-2 text-label-md text-primary transition-colors hover:bg-primary/5"
+                                                    >
+                                                        <Icon name="download" /> Unduh QRIS
+                                                    </button>
+                                                </>
                                             ) : (
                                                 <p className="text-on-surface-variant">Gambar QRIS belum tersedia.</p>
                                             )}
