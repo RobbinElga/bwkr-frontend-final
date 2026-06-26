@@ -37,6 +37,7 @@ export function DonationForm({
     const [phone, setPhone] = useState("");
     const [onBehalf, setOnBehalf] = useState("");
     const [message, setMessage] = useState("");
+    const [anonymous, setAnonymous] = useState(false);
 
     const [bankId, setBankId] = useState<number | null>(banks[0]?.id ?? null);
     const [proof, setProof] = useState<File | null>(null);
@@ -103,6 +104,8 @@ export function DonationForm({
         form.append("donor_phone", phone);
         form.append("amount", String(amount));
         form.append("bank_account_id", String(bankId));
+        if (onBehalf) form.append("on_behalf", onBehalf);
+        if (anonymous) form.append("donor_alias", "Hamba Allah");
         if (programId) form.append("program_id", String(programId));
         if (projectId) form.append("project_id", String(projectId));
         if (onBehalf) form.append("on_behalf", onBehalf);
@@ -451,22 +454,24 @@ export function DonationForm({
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label className="mb-2 block text-label-md text-on-surface-variant">Input Nominal Lain (Opsional)</label>
-                                    <div className="relative">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-label-md text-on-surface-variant">Rp</span>
-                                        <input
-                                            type="text"
-                                            inputMode="numeric"
-                                            value={amount ? amount.toLocaleString("id-ID") : ""}
-                                            onChange={(e) => {
-                                                const digits = e.target.value.replace(/\D/g, "");   // buang titik & non-angka
-                                                setAmount(digits ? Number(digits) : 0);
-                                            }}
-                                            placeholder="0"
-                                            className="w-full rounded-lg border border-outline-variant bg-surface-gray py-3 pl-12 pr-4 text-body-md text-on-surface outline-none focus:border-primary"
-                                        />
-                                    </div>
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-label-md text-on-surface-variant">Tampil di daftar donatur sebagai</label>
+                                    <button
+                                        type="button"
+                                        onClick={() => setAnonymous((v) => !v)}
+                                        className={cn(
+                                            "inline-flex items-center justify-center gap-2 rounded-lg border-2 py-3 text-label-md transition-colors",
+                                            anonymous
+                                                ? "border-primary-container bg-primary-container text-on-primary"
+                                                : "border-outline-variant text-on-surface-variant hover:border-primary-container"
+                                        )}
+                                    >
+                                        <Icon name={anonymous ? "check_circle" : "volunteer_activism"} />
+                                        Berwakaf sebagai Hamba Allah (anonim)
+                                    </button>
+                                    {anonymous && (
+                                        <p className="text-label-sm text-on-surface-variant">Nama Anda tidak ditampilkan publik; di daftar donatur akan tertulis "Hamba Allah".</p>
+                                    )}
                                 </div>
 
                                 <Field label="Atas Nama (opsional)" value={onBehalf} onChange={setOnBehalf} placeholder="mis. Keluarga Fulan" />

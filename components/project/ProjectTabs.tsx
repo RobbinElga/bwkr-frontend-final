@@ -109,22 +109,28 @@ export function ProjectTabs({
                             </p>
                         </div>
                     ) : (
-                        <ul className="divide-y divide-border-subtle">
-                            {donors.map((d, i) => (
-                                <li key={i} className="flex items-center justify-between gap-3 py-3">
-                                    <div className="flex items-center gap-3 min-w-0">
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-fixed text-on-primary-fixed shrink-0">
-                                            <Icon name="volunteer_activism" className="text-[20px]" />
+                        <ol className="space-y-2">
+                            {donors.map((d, i) => {
+                                const rank = i + 1;
+                                const medal =
+                                    rank === 1 ? "bg-amber-400 text-white"
+                                        : rank === 2 ? "bg-slate-300 text-slate-800"
+                                            : rank === 3 ? "bg-amber-700 text-white"
+                                                : "bg-surface-container-high text-on-surface-variant";
+                                return (
+                                    <li key={i} className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-container-lowest p-3 transition-shadow hover:shadow-sm">
+                                        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-label-md font-bold ${medal}`}>
+                                            {rank}
                                         </div>
-                                        <div className="min-w-0">
+                                        <div className="min-w-0 flex-1">
                                             <p className="text-label-md text-on-surface truncate">{d.name}</p>
                                             {d.date && <p className="text-label-sm text-on-surface-variant">{formatDate(d.date)}</p>}
                                         </div>
-                                    </div>
-                                    <span className="text-label-md font-bold text-primary whitespace-nowrap">{formatRupiah(d.amount)}</span>
-                                </li>
-                            ))}
-                        </ul>
+                                        <span className="text-label-md font-bold text-primary whitespace-nowrap">{formatRupiah(d.amount)}</span>
+                                    </li>
+                                );
+                            })}
+                        </ol>
                     )
                 )}
             </div>
