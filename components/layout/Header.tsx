@@ -2,18 +2,19 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui/Icon";
 import { UserMenu } from "@/components/layout/UserMenu";
 import { useAuth } from "@/stores/auth";
 import { ConfirmModal } from "../ui/ConfirmModal";
 import type { SiteSettings } from "@/services/public";
+import { useRouter, usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 
 const navLinks = [
     { label: "Beranda", href: "/" },
     { label: "Program", href: "/program" },
-    { label: "Dampak", href: "/#dampak" },
+    { label: "Dampak", href: "/dampak" },
     { label: "Berita", href: "/berita" },
     { label: "Laporan", href: "/laporan" },
     { label: "Tentang", href: "/tentang" },
@@ -22,7 +23,8 @@ const navLinks = [
 export function Header({ settings = {} }: { settings?: SiteSettings }) {
     const logo = settings.site_logo ?? null;
     const siteName = settings.site_name || "BWKR";
-
+    const pathname = usePathname();
+    const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
     const { user, status, logout } = useAuth();
@@ -55,30 +57,45 @@ export function Header({ settings = {} }: { settings?: SiteSettings }) {
                 scrolled ? "bg-surface/95 shadow-lg" : "bg-surface/90 shadow-md"
             )}
         >
-            <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 md:px-8">
-                <div className="flex items-center gap-8">
-                    <Link href="/" className="flex items-center gap-2 text-headline-lg font-bold text-primary">
-                        {logo ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img src={logo} alt={siteName} className="h-16 w-auto object-contain md:h-20" />
-                        ) : (
-                            siteName
-                        )}
-                    </Link>
-                    <nav className="hidden items-center gap-6 md:flex">
-                        {navLinks.map((l) => (
+            <div className="mx-auto flex h-24 max-w-7xl items-center justify-between gap-4 px-4 md:px-8">
+                {/* Logo */}
+                <Link href="/" className="flex shrink-0 items-center gap-2 text-headline-lg font-bold text-primary">
+                    {logo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={logo} alt={siteName} className="h-16 w-auto object-contain md:h-20" />
+                    ) : (
+                        siteName
+                    )}
+                </Link>
+
+                {/* Navigasi tengah + active */}
+                <nav className="hidden flex-1 items-center justify-center gap-8 md:flex">
+                    {navLinks.map((l) => {
+                        const active = isActive(l.href);
+                        return (
                             <Link
                                 key={l.href}
                                 href={l.href}
-                                className="text-label-md text-on-surface-variant transition-colors hover:text-primary"
+                                className={cn(
+                                    "relative py-1 text-label-md transition-colors",
+                                    active ? "font-semibold text-primary" : "text-on-surface-variant hover:text-primary"
+                                )}
                             >
                                 {l.label}
+                                {active && (
+                                    <motion.span
+                                        layoutId="nav-underline"
+                                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                                        className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-primary"
+                                    />
+                                )}
                             </Link>
-                        ))}
-                    </nav>
-                </div>
+                        );
+                    })}
+                </nav>
 
-                <div className="flex items-center gap-3">
+                {/* Aksi kanan */}
+                <div className="flex shrink-0 items-center gap-3">
                     <div className="hidden md:block">
                         <UserMenu />
                     </div>

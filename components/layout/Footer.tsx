@@ -41,7 +41,7 @@ export function Footer({ settings = {} }: { settings?: SiteSettings }) {
                 </div>
                 <FooterCol title="Program" links={[["Wakaf Al-Qur'an", "/program"], ["Air Bersih", "/program"], ["Pendidikan", "/program"]]} />
                 <FooterCol title="Navigasi" links={[["Tentang Kami", "/tentang"], ["Dampak", "/#dampak"], ["Project", "/project"], ["Berita", "/berita"]]} />
-                <FooterCol title="Informasi" links={[["Syarat & Ketentuan", "#"], ["Kebijakan Privasi", "#"], ["Hubungi Kami", "#"]]} />
+                <FooterCol title="Informasi" links={[["Cek Status Wakaf", "/cek-status"], ["Syarat & Ketentuan", "#"], ["Kebijakan Privasi", "#"], ["Hubungi Kami", "#"]]} />
             </Container>
             <Container className="flex flex-col items-center justify-between gap-4 border-t border-border-subtle py-8 md:flex-row">
                 <p className="text-label-sm text-on-surface-variant">
