@@ -124,6 +124,7 @@ export interface DonationHistoryItem {
     project: { name: string; slug: string } | null;
     program: { name: string } | null;
     bank_account: BankAccount | null;
+    donation_date: string | null;
     created_at: string;
 }
 

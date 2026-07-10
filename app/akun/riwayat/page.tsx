@@ -5,7 +5,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui/Icon";
 import { getDonations, getSummary } from "@/services/auth";
-import { formatRupiah, formatDate } from "@/lib/format";
+import { formatRupiah, formatDate, formatDateTime } from "@/lib/format";
 import type { DonationHistoryItem, Paginated, DonorSummary } from "@/types";
 
 const STATUS_MAP: Record<string, { label: string; bg: string; text: string; icon: string }> = {
@@ -106,7 +106,7 @@ export default function RiwayatPage() {
                                     <div className="mt-4 flex flex-wrap items-end gap-x-8 gap-y-3 border-t border-border-subtle pt-4">
                                         <div>
                                             <p className="text-label-sm uppercase text-outline">Tanggal</p>
-                                            <p className="text-body-md font-bold text-on-surface">{formatDate(d.created_at)}</p>
+                                            <p className="text-body-md font-bold text-on-surface">{d.donation_date ? formatDate(d.donation_date) : formatDateTime(d.created_at)}</p>
                                         </div>
                                         <div>
                                             <p className="text-label-sm uppercase text-outline">Jumlah Wakaf</p>

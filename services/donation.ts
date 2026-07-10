@@ -38,6 +38,7 @@ export interface DonationStatus {
     donor_name: string;
     amount: number;
     status: string;
+    donation_date: string | null;
     created_at: string;
 }
 

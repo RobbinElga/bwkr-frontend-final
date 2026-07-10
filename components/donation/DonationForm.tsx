@@ -110,6 +110,7 @@ export function DonationForm({
         if (projectId) form.append("project_id", String(projectId));
         if (onBehalf) form.append("on_behalf", onBehalf);
         if (message) form.append("message", message);
+        form.append("donation_date", new Date().toISOString().split("T")[0]);
         form.append("proof", proof);
 
         try {
@@ -481,6 +482,7 @@ export function DonationForm({
                                     <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={3} placeholder="Tuliskan doa terbaik Anda..."
                                         className="w-full resize-none rounded-lg border border-outline-variant bg-surface-gray p-4 text-body-md text-on-surface outline-none focus:border-primary" />
                                 </div>
+
 
                                 <div className="pt-2">
                                     <button onClick={gotoStep2} className="w-full rounded-xl bg-primary-container py-4 text-headline-md text-on-primary shadow-lg transition-all hover:bg-primary active:scale-[0.98]">

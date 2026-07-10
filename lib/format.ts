@@ -11,6 +11,17 @@ export function formatDate(iso: string | null): string {
     });
 }
 
+export function formatDateTime(iso: string | null): string {
+    if (!iso) return "";
+    return new Date(iso).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+}
+
 /** Estimasi waktu baca (menit) dari konten HTML. */
 export function readingTime(html: string | null): number {
     if (!html) return 1;

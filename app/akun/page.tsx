@@ -6,7 +6,7 @@ import { Icon } from "@/components/ui/Icon";
 import { Avatar } from "@/components/ui/Avatar";
 import { useAuth } from "@/stores/auth";
 import { getSummary, getDonations } from "@/services/auth";
-import { formatRupiah, formatDate } from "@/lib/format";
+import { formatRupiah, formatDate, formatDateTime } from "@/lib/format";
 import type { DonorSummary, DonationHistoryItem } from "@/types";
 
 const STATUS_MAP: Record<string, { label: string; bg: string; text: string; icon: string }> = {
@@ -147,7 +147,7 @@ export default function RingkasanPage() {
                                             {d.project?.name ?? d.program?.name ?? "Wakaf Umum"}
                                         </p>
                                         <p className="text-label-sm text-on-surface-variant">
-                                            {formatDate(d.created_at)} · {d.ref_no}
+                                            {d.donation_date ? formatDate(d.donation_date) : formatDateTime(d.created_at)} · {d.ref_no}
                                         </p>
                                     </div>
                                     <div className="shrink-0 text-right">

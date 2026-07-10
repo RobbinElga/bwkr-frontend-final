@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
-import { formatRupiah, formatDate } from "@/lib/format";
+import { formatRupiah, formatDate, formatDateTime } from "@/lib/format";
 import { getDonationStatus, type DonationStatus } from "@/services/donation";
 
 const STATUS_MAP: Record<string, { label: string; icon: string; cls: string }> = {
@@ -72,7 +72,7 @@ export function StatusChecker({ initialRef }: { initialRef: string }) {
                         <Row label="Nomor Referensi" value={data.ref_no} mono />
                         <Row label="Nama Donatur" value={data.donor_name} />
                         <Row label="Nominal" value={formatRupiah(data.amount)} />
-                        <Row label="Tanggal" value={formatDate(data.created_at)} />
+                        <Row label="Tanggal" value={data.donation_date ? formatDate(data.donation_date) : formatDateTime(data.created_at)} />
                     </dl>
                 </div>
             )}

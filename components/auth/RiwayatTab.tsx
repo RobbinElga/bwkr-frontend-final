@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { getDonations } from "@/services/auth";
-import { formatRupiah, formatDate } from "@/lib/format";
+import { formatRupiah, formatDate, formatDateTime } from "@/lib/format";
 import type { DonationHistoryItem, Paginated } from "@/types";
 
 const STATUS_MAP: Record<string, { label: string; bg: string; text: string; icon: string }> = {
@@ -81,7 +81,7 @@ export function RiwayatTab() {
                                 <p className="text-headline-md text-primary">{formatRupiah(d.amount)}</p>
                                 <p className="text-label-sm text-on-surface-variant">
                                     {d.bank_account ? `${d.bank_account.bank_name} · ` : ""}
-                                    {formatDate(d.created_at)}
+                                    {d.donation_date ? formatDate(d.donation_date) : formatDateTime(d.created_at)}
                                 </p>
                                 {d.on_behalf && (
                                     <p className="text-label-sm text-on-surface-variant">Atas nama: {d.on_behalf}</p>
