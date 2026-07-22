@@ -455,6 +455,25 @@ export function DonationForm({
                                     </div>
                                 </div>
 
+                                <div>
+                                    <label className="mb-2 block text-label-md text-on-surface-variant">Atau isi nominal sendiri</label>
+                                    <div className="relative">
+                                        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-body-md text-on-surface-variant">Rp</span>
+                                        <input
+                                            type="text"
+                                            inputMode="numeric"
+                                            value={amount ? amount.toLocaleString("id-ID") : ""}
+                                            onChange={(e) => {
+                                                const digits = e.target.value.replace(/\D/g, ""); // angka saja
+                                                setAmount(digits ? Number(digits) : 0);
+                                            }}
+                                            placeholder="mis. 75.000"
+                                            className="w-full rounded-lg border border-outline-variant bg-surface-gray py-3 pl-11 pr-4 text-body-md text-on-surface outline-none focus:border-primary"
+                                        />
+                                    </div>
+                                    <p className="mt-1 text-label-sm text-on-surface-variant">Minimal Rp1.000.</p>
+                                </div>
+
                                 <div className="flex flex-col gap-2">
                                     <label className="text-label-md text-on-surface-variant">Tampil di daftar donatur sebagai</label>
                                     <button
@@ -595,7 +614,7 @@ function SelectField({ label, value, onChange, children, disabled }: {
             <label className="mb-2 block text-label-md text-on-surface-variant">{label}</label>
             <div className="relative">
                 <select value={value} onChange={(e) => onChange(e.target.value)} disabled={disabled}
-                    className="w-full appearance-none rounded-lg border border-outline-variant bg-surface-gray px-4 py-3 text-body-md text-on-surface outline-none focus:border-primary disabled:opacity-60">
+                    className="w-full appearance-none truncate rounded-lg border border-outline-variant bg-surface-gray py-3 pl-4 pr-10 text-body-md text-on-surface outline-none focus:border-primary disabled:opacity-60">
                     {children}
                 </select>
                 <Icon name="expand_more" className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant" />
