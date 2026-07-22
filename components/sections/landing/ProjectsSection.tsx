@@ -49,7 +49,10 @@ export function ProjectsSection({ projects }: { projects: Project[] }) {
                 ) : (
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                         {visible.map((p) => {
-                            const percent = Math.min(100, Math.round(p.progress_percent));
+                            const raw = p.target_amount > 0 ? (p.amount_raised / p.target_amount) * 100 : 0;
+                            const percent = Math.min(100, Math.round(raw));
+                            const percentLabel = raw > 0 && raw < 1 ? "<1%" : `${percent}%`;
+                            const barWidth = raw > 0 ? Math.min(100, Math.max(2, raw)) : 0; // sliver tipis saat >0
                             return (
                                 <article
                                     key={p.id}
@@ -86,16 +89,19 @@ export function ProjectsSection({ projects }: { projects: Project[] }) {
                                             <p className="mb-4 line-clamp-2 text-body-md text-on-surface-variant">{p.description}</p>
                                         </div>
                                         <div>
-                                            <div className="mb-2 flex items-end justify-between">
+                                            <div className="mb-2 flex items-end justify-between gap-3">
                                                 <div>
                                                     <span className="text-label-sm text-on-surface-variant">Terkumpul</span>
                                                     <p className="text-lg font-bold text-primary">{formatRupiah(p.amount_raised)}</p>
+                                                    <p className="mt-0.5 text-label-sm text-on-surface-variant">
+                                                        dari target {formatRupiah(p.target_amount)}
+                                                    </p>
                                                 </div>
                                                 <span className={cn(
-                                                    "text-lg font-bold",
+                                                    "whitespace-nowrap text-lg font-bold",
                                                     percent >= 100 ? "text-secondary" : "text-primary"
                                                 )}>
-                                                    {percent}%
+                                                    {percentLabel}
                                                 </span>
                                             </div>
                                             <div className="mb-4 h-2.5 w-full overflow-hidden rounded-full bg-surface-container-high">
@@ -104,7 +110,7 @@ export function ProjectsSection({ projects }: { projects: Project[] }) {
                                                         "h-full rounded-full transition-all duration-700",
                                                         percent >= 100 ? "bg-secondary" : "bg-primary"
                                                     )}
-                                                    style={{ width: `${percent}%` }}
+                                                    style={{ width: `${barWidth}%` }}
                                                 />
                                             </div>
                                             <Link
