@@ -10,7 +10,6 @@ export default async function PublicLayout({ children }: { children: React.React
 
     return (
         <>
-            <LandingSplash />
             <Header settings={settings} />
             {children}
             <Footer settings={settings} />
