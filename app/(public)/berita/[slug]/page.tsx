@@ -165,7 +165,7 @@ export default async function BeritaDetailPage({ params }: Props) {
                                                 fill
                                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                                                 sizes="(max-width:768px) 100vw, 33vw"
-                                            />
+                                                priority />
                                         ) : (
                                             <div className="flex h-full items-center justify-center text-on-surface-variant">
                                                 <Icon name="article" className="text-4xl opacity-40" />

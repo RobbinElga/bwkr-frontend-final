@@ -13,7 +13,7 @@ export function Avatar({ name, src, size = 40, className = "" }: {
             style={{ width: size, height: size }}
         >
             {src ? (
-                <Image src={src} alt={name} fill className="object-cover" sizes={`${size}px`} />
+                <Image src={src} alt={name} fill className="object-cover" sizes={`${size}px`} priority />
             ) : (
                 <span style={{ fontSize: size * 0.4 }} className="font-bold">{initial}</span>
             )}

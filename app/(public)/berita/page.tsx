@@ -41,7 +41,7 @@ export default async function BeritaPage() {
                                                 fill
                                                 className="object-cover transition-transform duration-700 group-hover:scale-110"
                                                 sizes="(max-width:768px) 100vw, 33vw"
-                                            />
+                                                priority />
                                         ) : (
                                             <div className="flex h-full items-center justify-center text-on-surface-variant">
                                                 <Icon name="article" className="text-4xl opacity-40" />

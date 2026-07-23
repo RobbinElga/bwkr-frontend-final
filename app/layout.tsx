@@ -22,9 +22,10 @@ export default function RootLayout({
   return (
     <html lang="id" className={jakarta.variable}>
       <head>
-        {/* Ikon Material Symbols (dipakai di seluruh desain Stitch) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&icon_names=account_balance,account_circle,analytics,arrow_back,arrow_forward,article,badge,bookmark,calendar_today,call,check_circle,chevron_left,chevron_right,close,cloud_upload,content_copy,description,download,edit,error,expand_more,groups,home,image,info,key,lock,logout,mail,menu,person,photo_camera,play_arrow,progress_activity,receipt_long,save,schedule,search_off,send,share,star,thumb_up,verified,verified_user,volunteer_activism&display=block"
           rel="stylesheet"
         />
       </head>

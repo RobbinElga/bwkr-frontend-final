@@ -66,6 +66,7 @@ export function ProjectsSection({ projects }: { projects: Project[] }) {
                                                 fill
                                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                                                 sizes="(max-width:768px) 100vw, 40vw"
+                                                priority
                                             />
                                         ) : (
                                             <div className="flex h-full min-h-64 items-center justify-center text-on-surface-variant">

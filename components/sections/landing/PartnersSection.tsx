@@ -37,6 +37,7 @@ export function PartnersSection({ partners }: { partners: Partner[] }) {
                                     width={120}
                                     height={40}
                                     className="h-8 w-auto object-contain md:h-10"
+                                    priority
                                 />
                             ) : (
                                 <span className="whitespace-nowrap text-label-md text-on-surface-variant">{p.name}</span>

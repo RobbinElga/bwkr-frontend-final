@@ -86,7 +86,7 @@ export function ProjectTabs({
                                         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
                                             {u.image_urls.map((img, i) => (
                                                 <div key={i} className="relative aspect-square overflow-hidden rounded-xl">
-                                                    <Image src={img} alt={u.title} fill className="object-cover" sizes="200px" />
+                                                    <Image src={img} alt={u.title} fill className="object-cover" sizes="200px" priority />
                                                 </div>
                                             ))}
                                         </div>

@@ -27,7 +27,7 @@ export function TestimonialsSection({ testimonials }: { testimonials: Testimonia
                             <figcaption className="flex items-center gap-4">
                                 <div className="h-12 w-12 overflow-hidden rounded-full bg-surface-dim">
                                     {t.photo_url ? (
-                                        <Image src={t.photo_url} alt={t.name} width={48} height={48} className="h-full w-full object-cover" />
+                                        <Image src={t.photo_url} alt={t.name} width={48} height={48} className="h-full w-full object-cover" priority />
                                     ) : (
                                         <div className="flex h-full w-full items-center justify-center font-bold text-on-surface-variant">
                                             {t.name.charAt(0)}

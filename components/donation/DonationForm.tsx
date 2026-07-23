@@ -190,7 +190,7 @@ export function DonationForm({
                             <section className="flex flex-col gap-6 overflow-hidden rounded-xl border border-border-subtle bg-surface-container-lowest p-6 custom-shadow md:flex-row md:p-8">
                                 <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-lg bg-surface-container-high md:w-1/3">
                                     {targetImage ? (
-                                        <Image src={targetImage} alt={targetName} fill className="object-cover" sizes="(max-width:768px) 100vw, 240px" />
+                                        <Image src={targetImage} alt={targetName} fill className="object-cover" sizes="(max-width:768px) 100vw, 240px" priority />
                                     ) : (
                                         <div className="flex h-full items-center justify-center text-on-surface-variant">
                                             <Icon name="volunteer_activism" filled className="text-4xl opacity-40" />

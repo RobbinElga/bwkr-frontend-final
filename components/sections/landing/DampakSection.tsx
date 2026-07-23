@@ -52,7 +52,7 @@ export function DampakSection({ videos }: { videos: ImpactVideo[] }) {
                     className="group relative mb-6 block aspect-video w-full overflow-hidden rounded-3xl bg-surface-container-highest shadow-xl"
                 >
                     {thumb(featured.youtube_id) && (
-                        <Image src={thumb(featured.youtube_id)!} alt={featured.caption ?? "Video dampak"} fill className="object-cover" sizes="100vw" />
+                        <Image src={thumb(featured.youtube_id)!} alt={featured.caption ?? "Video dampak"} fill className="object-cover" sizes="100vw" priority />
                     )}
                     <PlayOverlay big />
                     {featured.caption && (
@@ -73,7 +73,7 @@ export function DampakSection({ videos }: { videos: ImpactVideo[] }) {
                                 className="group relative block aspect-video overflow-hidden rounded-3xl bg-surface-container-highest shadow-lg"
                             >
                                 {thumb(v.youtube_id) && (
-                                    <Image src={thumb(v.youtube_id)!} alt={v.caption ?? "Video dampak"} fill className="object-cover" sizes="(max-width:768px) 100vw, 33vw" />
+                                    <Image src={thumb(v.youtube_id)!} alt={v.caption ?? "Video dampak"} fill className="object-cover" sizes="(max-width:768px) 100vw, 33vw" priority />
                                 )}
                                 <PlayOverlay />
                                 {v.caption && (

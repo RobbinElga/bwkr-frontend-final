@@ -68,7 +68,7 @@ function ReportCard({ report }: { report: ReportItem }) {
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width:768px) 100vw, 33vw"
-                    />
+                        priority />
                 ) : (
                     <div className="flex h-full w-full items-center justify-center">
                         <Icon name="analytics" filled className="text-6xl text-on-primary-container opacity-60" />

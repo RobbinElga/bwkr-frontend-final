@@ -36,7 +36,7 @@ export function ProjectGallery({ images, alt }: { images: string[]; alt: string 
                             className={`relative aspect-square overflow-hidden rounded-xl border-2 transition-all ${active === i ? "border-primary" : "border-transparent opacity-70 hover:opacity-100"
                                 }`}
                         >
-                            <Image src={img} alt={`${alt} ${i + 1}`} fill className="object-cover" sizes="120px" />
+                            <Image src={img} alt={`${alt} ${i + 1}`} fill className="object-cover" sizes="120px" priority />
                         </button>
                     ))}
                 </div>
