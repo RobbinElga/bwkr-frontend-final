@@ -41,6 +41,7 @@ export function DonationForm({
 
     const [bankId, setBankId] = useState<number | null>(banks[0]?.id ?? null);
     const [proof, setProof] = useState<File | null>(null);
+    const [proofPreview, setProofPreview] = useState<string | null>(null);
     const [dragOver, setDragOver] = useState(false);
 
     const [error, setError] = useState<string | null>(null);
@@ -69,6 +70,14 @@ export function DonationForm({
         const list = selectedProject?.bank_accounts?.length ? selectedProject.bank_accounts : banks;
         setBankId((prev) => (list.some((b) => b.id === prev) ? prev : list[0]?.id ?? null));
     }, [projectId]);
+
+    // Pratinjau bukti (khusus gambar)
+    useEffect(() => {
+        if (!proof || !proof.type.startsWith("image/")) { setProofPreview(null); return; }
+        const url = URL.createObjectURL(proof);
+        setProofPreview(url);
+        return () => URL.revokeObjectURL(url);
+    }, [proof]);
 
 
     function showToast(msg: string) {
@@ -108,7 +117,6 @@ export function DonationForm({
         if (anonymous) form.append("donor_alias", "Hamba Allah");
         if (programId) form.append("program_id", String(programId));
         if (projectId) form.append("project_id", String(projectId));
-        if (onBehalf) form.append("on_behalf", onBehalf);
         if (message) form.append("message", message);
         form.append("donation_date", new Date().toISOString().split("T")[0]);
         form.append("proof", proof);
@@ -190,7 +198,7 @@ export function DonationForm({
                             <section className="flex flex-col gap-6 overflow-hidden rounded-xl border border-border-subtle bg-surface-container-lowest p-6 custom-shadow md:flex-row md:p-8">
                                 <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-lg bg-surface-container-high md:w-1/3">
                                     {targetImage ? (
-                                        <Image src={targetImage} alt={targetName} fill className="object-cover" sizes="(max-width:768px) 100vw, 240px" priority />
+                                        <Image src={targetImage} alt={targetName} fill className="object-cover" sizes="(max-width:768px) 100vw, 240px" />
                                     ) : (
                                         <div className="flex h-full items-center justify-center text-on-surface-variant">
                                             <Icon name="volunteer_activism" filled className="text-4xl opacity-40" />
@@ -359,12 +367,42 @@ export function DonationForm({
                                 </label>
 
                                 {proof && (
-                                    <div className="mb-6 flex items-center gap-3 rounded-lg bg-surface-container p-4">
-                                        <Icon name="description" className="text-primary" />
-                                        <span className="flex-1 truncate text-label-md text-on-surface">{proof.name}</span>
-                                        <button onClick={() => setProof(null)} className="text-error transition-transform hover:scale-110" aria-label="Hapus">
-                                            <Icon name="close" />
-                                        </button>
+                                    <div className="mb-6 rounded-lg border border-outline-variant bg-surface-container p-3">
+                                        {proofPreview ? (
+                                            <div className="relative">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    src={proofPreview}
+                                                    alt="Pratinjau bukti transfer"
+                                                    className="max-h-56 w-full rounded-lg bg-white object-contain"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setProof(null)}
+                                                    className="absolute right-2 top-2 rounded-full bg-black/60 p-1.5 text-white transition-colors hover:bg-black/80"
+                                                    aria-label="Hapus"
+                                                >
+                                                    <Icon name="close" className="text-[18px]" />
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-3">
+                                                <Icon name="description" className="text-2xl text-primary" />
+                                                <span className="flex-1 truncate text-label-md text-on-surface">{proof.name}</span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setProof(null)}
+                                                    className="text-error transition-transform hover:scale-110"
+                                                    aria-label="Hapus"
+                                                >
+                                                    <Icon name="close" />
+                                                </button>
+                                            </div>
+                                        )}
+                                        <p className="mt-2 flex items-center gap-1 text-label-sm text-primary">
+                                            <Icon name="check_circle" filled className="text-[16px]" />
+                                            Bukti siap dikirim: <span className="font-medium">{proof.name}</span>
+                                        </p>
                                     </div>
                                 )}
 
@@ -464,7 +502,7 @@ export function DonationForm({
                                             inputMode="numeric"
                                             value={amount ? amount.toLocaleString("id-ID") : ""}
                                             onChange={(e) => {
-                                                const digits = e.target.value.replace(/\D/g, ""); // angka saja
+                                                const digits = e.target.value.replace(/\D/g, "");
                                                 setAmount(digits ? Number(digits) : 0);
                                             }}
                                             placeholder="mis. 75.000"
@@ -490,7 +528,7 @@ export function DonationForm({
                                         Berwakaf sebagai Hamba Allah (anonim)
                                     </button>
                                     {anonymous && (
-                                        <p className="text-label-sm text-on-surface-variant">Nama Anda tidak ditampilkan publik; di daftar donatur akan tertulis "Hamba Allah".</p>
+                                        <p className="text-label-sm text-on-surface-variant">Nama Anda tidak ditampilkan publik; di daftar donatur akan tertulis &quot;Hamba Allah&quot;.</p>
                                     )}
                                 </div>
 
